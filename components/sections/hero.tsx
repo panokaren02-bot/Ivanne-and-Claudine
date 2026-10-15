@@ -7,8 +7,7 @@ import localFont from "next/font/local"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { parseWeddingDate } from "@/lib/wedding-date"
 import { InvitePhotoBackdrop } from "@/components/loader/invite-photo-backdrop"
-import { PlainAtmosphere } from "@/components/loader/PlainAtmosphere"
-import { PlainBubbles } from "@/components/loader/PlainBubbles"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import { siteConfig as defaultSiteConfig } from "@/content/site"
 import "@/components/loader/loading-screen.css"
 import { TintedDeco } from "@/components/tinted-deco"
@@ -20,6 +19,10 @@ const cinzel = Cinzel({
 
 const theSeasons = localFont({
   src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -215,8 +218,6 @@ export function Hero() {
   const siteConfig = useSiteConfig()
   const loading = siteConfig.loadingScreen ?? defaultSiteConfig.loadingScreen
   const isPlain = loading.display === "plain"
-  const plainTheme =
-    loading.plainTheme ?? defaultSiteConfig.loadingScreen.plainTheme
   const cornerDecos =
     loading.cornerDecos ?? defaultSiteConfig.loadingScreen.cornerDecos
   const backgroundPhotos = loading.backgroundPhotos ?? []
@@ -262,15 +263,12 @@ export function Hero() {
     >
       {isPlain ? (
         <>
-          <PlainAtmosphere baseColor={plainTheme.background} />
-          <PlainBubbles />
+          <WatercolorBackdrop />
           <div className="home-hero-plain-corners" aria-hidden="true">
             {(
               [
                 { src: cornerDecos.topLeft, className: "left-0 top-0" },
                 { src: cornerDecos.topRight, className: "right-0 top-0" },
-                { src: cornerDecos.bottomLeft, className: "left-0 bottom-0" },
-                { src: cornerDecos.bottomRight, className: "right-0 bottom-0" },
               ] as const
             ).map(({ src, className }) => (
               <TintedDeco key={src} src={src} className={`home-hero-plain-corner-img absolute ${className}`} />

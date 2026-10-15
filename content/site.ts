@@ -76,10 +76,10 @@ const COUPLE = {
 const WEDDING_DATE = "March 20, 2027" // e.g. "June 5, 2027"
 const WEDDING_DAY = "Saturday"
 const TIMES = {
-  entourageCall: "1:00 PM", // entourage arrival
-  guestArrival: "1:30 PM", // guests arrival (shown in Event Details + reminders)
-  ceremony: "2:00 PM",
-  reception: "4:30 PM", // program proper
+  entourageCall: "8:00 AM", // entourage arrival
+  guestArrival: "8:30 AM", // guests arrival (shown in Event Details + reminders)
+  ceremony: "9:00 AM",
+  reception: "12:00 PM", // program proper
 }
 
 // ── Venues ──────────────────────────────────────────────────────────────────
@@ -172,45 +172,55 @@ const DRESS_CODE_PALETTE: AttireColor[] = [
 
 
 const ATTIRE = {
-  show: ["guests"] as AttireGroupId[],
+  show: ["sponsors", "entourage", "guests"] as AttireGroupId[],
 
   sponsors: {
-    title: "Principal Sponsors",
-    image: "/Details/entourage.png",
-    palette: [ ] as AttireColor[],
+    title: "Secondary Sponsors",
+    image: "/Details/secondarySponsors.png",
+    palette: [
+      { name: "Taupe Bronze", hex: "#B28A59" },
+      { name: "Caramel Nude", hex: "#DBAF88" },
+      { name: "Soft Peach Beige", hex: "#EBCAAB" },
+      { name: "Ivory Cream", hex: "#EFDFCF" },
+    ] as AttireColor[],
 
     ladies: {
       label: "Ladies",
       details:
-        "Formal floor-length dresses in elegant shades of sage, olive, and deep botanical green.",
-      highlight: "Formal Dresses",
+        "Formal floor-length satin gowns in warm neutral shades of taupe, champagne, nude, and ivory cream. Styles may vary — one-shoulder, strapless, or draped silhouettes — while keeping a soft, elegant, and cohesive look.",
+      highlight: "Formal Floor-Length Gowns",
     },
 
     gentlemen: {
       label: "Gentlemen",
       details:
-        "Formal suit or dress shirt paired with tailored slacks in coordinated sage, olive, or deep green tones.",
-      highlight: "Suit or Dress Shirt with Slacks",
+        "Beige or sand-toned suits worn with a white dress shirt; a brown tie, vest, or pocket square is welcome. Complete the look with brown leather shoes.",
+      highlight: "Beige Suit with White Dress Shirt",
     },
   },
 
   entourage: {
-    title: "Entourage",
-    image: "/Details/entourage.png",
-    palette: [] as AttireColor[],
+    title: "Bridesmaids & Groomsmen",
+    image: "/Details/bridesmaid-groomssmen.png",
+    palette: [
+      { name: "Chocolate Brown", hex: "#48251C" },
+      { name: "Dark Mocha", hex: "#59372B" },
+      { name: "Champagne Beige", hex: "#D9C3A1" },
+      { name: "Warm Sand", hex: "#CBB18C" },
+    ] as AttireColor[],
 
     ladies: {
-      label: "Ladies",
+      label: "Bridesmaids",
       details:
-        "Elegant floor-length dresses in coordinated sage green and botanical green shades. Dress styles may vary while maintaining a refined and cohesive look.",
-      highlight: "Formal Dresses",
+        "Floor-length gowns in chocolate brown or dark mocha. Silhouettes may vary — V-neck, off-shoulder, or tiered ruffles — while keeping a rich and coordinated look.",
+      highlight: "Chocolate Brown Gowns",
     },
 
     gentlemen: {
-      label: "Gentlemen",
+      label: "Groomsmen",
       details:
-        "Dress shirts paired with tailored slacks in complementary sage, olive, beige, or deep green tones.",
-      highlight: "Dress Shirt with Slacks",
+        "Champagne beige or warm sand suits with a white dress shirt, chocolate brown necktie, and matching pocket square, finished with brown leather shoes.",
+      highlight: "Champagne Beige Suits",
     },
   },
 
@@ -593,7 +603,7 @@ export const siteConfig = {
     //   icon:     fallback icon when there is no image —
     //             "arrival" | "rings" | "departure" | "cocktail" | "fireworks" | "dance"
     //   description: optional extra line ("" to hide)
-    // ⚠ check — 5:30 PM onward are placeholder times; set them to the real program.
+    // ⚠ check — Photo Session onward are suggested times for a 9:00 AM ceremony; set them to the real program.
     events: [
       {
         show: true,
@@ -633,7 +643,7 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "3:30 PM",
+        time: "10:30 AM",
         title: "Photo Session",
         description: "",
         location: "{ceremony}",
@@ -660,8 +670,8 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "4:30 PM",
-        title: "Early Dinner",
+        time: "12:30 PM",
+        title: "Wedding Lunch",
         description: "",
         location: "{reception}",
         image: "/weddingtimeline/DinnerService.png",
@@ -669,7 +679,7 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "5:00 PM",
+        time: "1:30 PM",
         title: "Cake Cutting",
         description: "",
         location: "{reception}",
@@ -678,7 +688,7 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "5:30 PM",
+        time: "2:00 PM",
         title: "First Dance & Party",
         description: "",
         location: "{reception}",
@@ -687,7 +697,7 @@ export const siteConfig = {
       },
       {
         show: true,
-        time: "6:30 PM",
+        time: "3:00 PM",
         title: "Send-Off",
         description: "",
         location: "{reception}",

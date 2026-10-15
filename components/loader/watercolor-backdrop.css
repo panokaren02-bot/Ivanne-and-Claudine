@@ -1,0 +1,191 @@
+/* Plain mode — beige watercolor wash on cream paper (loader, envelope hero, home hero) */
+
+.watercolor-backdrop {
+  --wc-paper: #fbf8f2;
+  --wc-wash-1: #e9d8bf;
+  --wc-wash-2: #dfc8a6;
+  --wc-wash-3: #f1e5d3;
+  --wc-dust: #d9b98a;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 45%, #fffdf9 0%, transparent 75%),
+    var(--wc-paper);
+}
+
+.watercolor-backdrop--fixed {
+  position: fixed;
+}
+
+.watercolor-backdrop__defs {
+  position: absolute;
+}
+
+.watercolor-backdrop__wash {
+  position: absolute;
+  width: max(110vw, 70vh);
+  height: max(70vh, 60vw);
+  max-width: 1100px;
+  max-height: 900px;
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+  will-change: transform, opacity;
+}
+
+.watercolor-backdrop__wash--top {
+  top: -8%;
+  right: -12%;
+  transform-origin: 80% 15%;
+  animation: wc-wash-top 22s ease-in-out infinite alternate;
+}
+
+.watercolor-backdrop__wash--bottom {
+  bottom: -10%;
+  left: -14%;
+  transform-origin: 20% 85%;
+  animation: wc-wash-bottom 26s ease-in-out infinite alternate;
+}
+
+.watercolor-backdrop__wash--drift {
+  top: 20%;
+  left: 10%;
+  width: 80vw;
+  height: 50vh;
+  opacity: 0.4;
+  animation: wc-wash-drift 34s ease-in-out infinite alternate;
+}
+
+.wc-tone-1 { fill: var(--wc-wash-1); opacity: 0.75; }
+.wc-tone-2 { fill: var(--wc-wash-2); opacity: 0.55; }
+.wc-tone-3 { fill: var(--wc-wash-3); opacity: 0.9; }
+
+/* Pigment slowly spreading and settling, like wet paint on paper */
+@keyframes wc-wash-top {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.8; }
+  50% { transform: translate3d(-3%, 2.5%, 0) scale(1.06) rotate(-2deg); opacity: 0.92; }
+  100% { transform: translate3d(2%, 4%, 0) scale(1.1) rotate(1.5deg); opacity: 0.84; }
+}
+
+@keyframes wc-wash-bottom {
+  0% { transform: translate3d(0, 0, 0) scale(1.04) rotate(0deg); opacity: 0.86; }
+  50% { transform: translate3d(3%, -2%, 0) scale(1) rotate(2deg); opacity: 0.78; }
+  100% { transform: translate3d(-2%, -4%, 0) scale(1.09) rotate(-1.5deg); opacity: 0.9; }
+}
+
+@keyframes wc-wash-drift {
+  0% { transform: translate3d(-12%, -6%, 0) scale(0.9); opacity: 0.25; }
+  50% { transform: translate3d(8%, 4%, 0) scale(1.08); opacity: 0.45; }
+  100% { transform: translate3d(14%, -8%, 0) scale(0.96); opacity: 0.3; }
+}
+
+/* A soft window light that slowly travels across the paper */
+.watercolor-backdrop__light {
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(
+    ellipse 35% 30% at 50% 50%,
+    rgba(255, 252, 244, 0.75) 0%,
+    rgba(255, 248, 235, 0.25) 45%,
+    transparent 70%
+  );
+  mix-blend-mode: soft-light;
+  animation: wc-light 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes wc-light {
+  0% { transform: translate3d(-22%, -16%, 0); }
+  50% { transform: translate3d(10%, 6%, 0); }
+  100% { transform: translate3d(24%, -10%, 0); }
+}
+
+/* Cold-press paper tooth */
+.watercolor-backdrop__paper {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.32  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>");
+}
+
+/* Golden dust drifting upward */
+.watercolor-backdrop__motes {
+  position: absolute;
+  inset: 0;
+}
+
+.watercolor-backdrop__mote {
+  position: absolute;
+  left: var(--x);
+  bottom: -12px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6e4 0%, var(--wc-dust) 60%, transparent 100%);
+  box-shadow: 0 0 6px rgba(217, 185, 138, 0.6);
+  opacity: 0;
+  animation: wc-mote var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes wc-mote {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  10% { opacity: 0.8; }
+  50% { transform: translate3d(var(--drift), -55vh, 0); opacity: 0.6; }
+  90% { opacity: 0.7; }
+  100% { transform: translate3d(calc(var(--drift) * -0.5), -110vh, 0); opacity: 0; }
+}
+
+.watercolor-backdrop__sparkle {
+  position: absolute;
+  fill: #ffffff;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
+  transform: translate(-50%, -50%);
+  animation: wc-twinkle 4.5s ease-in-out infinite;
+}
+
+@keyframes wc-twinkle {
+  0%, 100% { opacity: 0.95; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  50% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.75) rotate(45deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .watercolor-backdrop__wash,
+  .watercolor-backdrop__light,
+  .watercolor-backdrop__sparkle {
+    animation: none;
+  }
+
+  .watercolor-backdrop__motes {
+    display: none;
+  }
+}
+
+.watercolor-backdrop__washes {
+  position: absolute;
+  inset: 0;
+}
+
+/* Section layer: transparent base, washes fade out at the top + bottom so stacked sections never seam */
+.watercolor-backdrop--layer {
+  background: none;
+}
+
+.watercolor-backdrop--layer .watercolor-backdrop__washes,
+.watercolor-backdrop--layer .watercolor-backdrop__light {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+}
+
+/* In a tall section, size washes to the section rather than the viewport */
+.watercolor-backdrop--layer .watercolor-backdrop__wash--top,
+.watercolor-backdrop--layer .watercolor-backdrop__wash--bottom {
+  width: 85%;
+  height: 70%;
+}
+
+.watercolor-backdrop--mirror .watercolor-backdrop__washes {
+  transform: scaleX(-1);
+}

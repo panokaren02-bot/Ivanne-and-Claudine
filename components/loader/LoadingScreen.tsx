@@ -7,13 +7,16 @@ import { useReducedMotion } from 'motion/react';
 import { useSiteConfig } from '@/hooks/use-site-config';
 import { siteConfig as defaultSiteConfig } from '@/content/site';
 import { PhotoMarquee } from '@/components/loader/invite-photo-backdrop';
-import { PlainAtmosphere } from '@/components/loader/PlainAtmosphere';
-import { PlainBubbles } from '@/components/loader/PlainBubbles';
+import { WatercolorBackdrop } from '@/components/loader/WatercolorBackdrop';
 import { TintedDeco } from '@/components/tinted-deco';
 import './loading-screen.css';
 
 const theSeasons = localFont({
   src: '../../Font/Fontspring-DEMO-theseasons-reg.otf',
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: 'swap',
 });
 
@@ -250,8 +253,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
 
       {isPlain && (
         <>
-          <PlainAtmosphere baseColor={plainTheme.background} />
-          <PlainBubbles />
+          <WatercolorBackdrop />
           <div className="loading-screen__plain-corners" aria-hidden="true">
             {(
               [
@@ -260,9 +262,9 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, onFade
                 { src: cornerDecos.bottomLeft, className: 'left-0 bottom-0' },
                 { src: cornerDecos.bottomRight, className: 'right-0 bottom-0' },
               ] as const
-            ).map(({ src, className }) => (
+            ).filter(({ src }) => src).map(({ src, className }) => (
               <div
-                key={src}
+                key={className}
                 className={`loading-screen__plain-corner-slot pointer-events-none absolute ${className}`}
               >
                 <TintedDeco src={src} className="loading-screen__plain-corner-img" />

@@ -11,7 +11,7 @@ import localFont from "next/font/local"
 import { Cinzel } from "next/font/google"
 import { Shirt, Copy, Check, Navigation, Heart, MapPin } from "lucide-react"
 import { motion, useReducedMotion, type Variants } from "motion/react"
-import { PlainBubbles } from "@/components/loader/PlainBubbles"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import { TintedDeco } from "@/components/tinted-deco"
 
 const cinzel = Cinzel({
@@ -21,6 +21,10 @@ const cinzel = Cinzel({
 
 const theSeasons = localFont({
   src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -44,7 +48,7 @@ const C = {
   light: "var(--color-motif-soft)",
 } as const
 
-// Section background = the hero's circle pattern (PlainBubbles paints its own aqua base)
+// Section background = the watercolor paper (WatercolorBackdrop paints its own cream base)
 const sectionBg = "var(--color-bg-pattern-base)"
 
 // Text sitting directly on the circle pattern (colors: globals.css → --color-on-pattern*)
@@ -55,18 +59,17 @@ const onBg = {
 
 const hairline = "color-mix(in srgb, var(--color-motif-medium) 55%, transparent)"
 
+// Light paper cards — same treatment as the love story cards
 const cardStyle = {
-  background: C.paper,
-  borderColor: "color-mix(in srgb, var(--color-motif-medium) 70%, transparent)",
-  borderWidth: "1px",
-  borderStyle: "solid",
+  background:
+    "radial-gradient(ellipse 90% 50% at 50% 0%, #ffffff 0%, transparent 70%), linear-gradient(180deg, #fffdf9 0%, #fbf4ea 100%)",
   boxShadow:
-    "0 22px 48px -26px color-mix(in srgb, var(--color-welcome-navy) 55%, transparent), inset 0 1px 0 rgb(255 255 255 / 80%)",
+    "inset 0 0 0 1px color-mix(in srgb, var(--color-motif-accent) 24%, transparent), inset 0 1px 0 rgb(255 255 255 / 90%), 0 2px 6px -2px rgb(92 62 40 / 12%), 0 28px 54px -30px rgb(92 62 40 / 42%)",
 } as const
 
 const softPanelStyle = {
   borderColor: hairline,
-  backgroundColor: "color-mix(in srgb, var(--color-motif-silver) 35%, var(--color-welcome-bg-soft))",
+  backgroundColor: "color-mix(in srgb, var(--color-motif-accent) 7%, #fffaf3)",
 } as const
 
 
@@ -611,7 +614,7 @@ function EventVenueCard({
             )}
           </div>
 
-          <div className="rounded-2xl p-3 sm:p-4 md:p-5 mb-4 sm:mb-6" style={{ backgroundColor: softPanelStyle.backgroundColor }}>
+          <div className="rounded-2xl border p-3 sm:p-4 md:p-5 mb-4 sm:mb-6" style={{ backgroundColor: softPanelStyle.backgroundColor, borderColor: "color-mix(in srgb, var(--color-motif-accent) 20%, transparent)" }}>
             <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
               <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mt-0.5 flex-shrink-0" style={{ color: C.accent }} />
               <div className="flex-1 min-w-0">
@@ -758,8 +761,8 @@ export function Details() {
       className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full overflow-hidden`}
       style={{ background: sectionBg }}
     >
-      {/* Same circle pattern as the hero */}
-      <PlainBubbles />
+      {/* Same watercolor paper as the hero, envelope and love story */}
+      <WatercolorBackdrop />
       <Section
         id="details"
         className="relative z-10 pt-14 pb-12 sm:pt-16 sm:pb-14 md:pt-20 md:pb-16 lg:pt-24 lg:pb-20 overflow-hidden"

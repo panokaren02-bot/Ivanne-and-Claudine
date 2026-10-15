@@ -42,6 +42,18 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  /* Letters only — digits and special characters come from 'Seasons Numerals' */
+  unicode-range: U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153;
+}
+
+/* Numbers + special characters wherever The Seasons is used (Playfair Display, OFL) */
+@font-face {
+  font-family: 'Seasons Numerals';
+  src: url('/fonts/playfair-display/PlayfairDisplay-latin.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E, U+00A0-00BF, U+00D7, U+00F7, U+2010-2027, U+2030-205E, U+20AC, U+2122, U+2190-2199;
 }
 @font-face {
   font-family: 'Above the Beyond';
@@ -552,28 +564,33 @@
  * ========================================== */
 
 
-/* Main paper — dusty blush */
---color-envelope-paper: #E3CAC5;
+/* Main paper — terracotta linen */
+--color-envelope-paper: #c48c73;
 
 
 /* Back panel / inside */
---color-envelope-base: color-mix(in srgb, #E3CAC5 86%, var(--color-motif-deep));
+--color-envelope-base: #b98068;
 
 
 /* Lit edges */
---color-envelope-highlight: color-mix(in srgb, #E3CAC5 60%, white);
+--color-envelope-highlight: #d4a28b;
 
 
 /* Flap folds */
---color-envelope-fold: color-mix(in srgb, #E3CAC5 80%, var(--color-motif-deep));
+--color-envelope-fold: #ad755e;
 
 
 /* Shadows */
---color-envelope-shadow: color-mix(in srgb, var(--color-motif-deep) 70%, #E3CAC5);
+--color-envelope-shadow: #8a5a45;
 
 
 /* Crease hairlines on the paper */
---color-envelope-crease: color-mix(in srgb, var(--color-motif-deep) 22%, transparent);
+--color-envelope-crease: rgba(90, 50, 35, 0.35);
+
+
+/* Envelope lining — beige linen (inside of the flap + back of the open envelope) */
+--color-envelope-liner: #e8d6bb;
+--color-envelope-liner-deep: #d8c09c;
 
 
 /* ==========================================
@@ -612,6 +629,8 @@
 
 /* Decorations (corner leaves, ornaments) — flat silhouette color */
 --color-deco: var(--color-motif-accent);
+/* Terracotta corner foliage on the loader, envelope hero and home hero */
+--color-deco-corner: #c48c73;
 
 
 /* ------------------------------------------
@@ -876,7 +895,7 @@
   --font-imperial-script: "Imperial Script", cursive;
   --font-anastasia-script: "CoupleAnastasia";
   --font-beautiful-malera: "Beautiful Malera", cursive;
-  --font-the-seasons: "The Seasons", serif;
+  --font-the-seasons: "The Seasons", "Seasons Numerals", serif;
   --font-above-beyond: "Above the Beyond", cursive;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

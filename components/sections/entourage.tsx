@@ -9,7 +9,7 @@ import { Cinzel } from "next/font/google"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { fetchUntilReady, isAbortError } from "@/lib/fetch-until-ready"
 import { fetchInvitationList, readCachedInvitationList } from "@/lib/invitation-data"
-import { PlainBubbles } from "@/components/loader/PlainBubbles"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import { TintedDeco } from "@/components/tinted-deco"
 
 const cinzel = Cinzel({
@@ -19,6 +19,10 @@ const cinzel = Cinzel({
 
 const theSeasons = localFont({
   src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -30,14 +34,13 @@ const aboveTheBeyond = localFont({
 })
 
 // Palette lives in globals.css → motif / welcome tokens.
-const PAPER = "var(--color-welcome-bg-soft)"
 const ACCENT = "var(--color-motif-accent)"
 const NAVY = "var(--color-ink-deep)"
 const SCRIPT = "var(--color-ink-accent)"
 const BODY = "var(--color-welcome-text)"
-const HAIRLINE = "color-mix(in srgb, var(--color-motif-medium) 60%, transparent)"
+const HAIRLINE = "color-mix(in srgb, var(--color-motif-accent) 32%, transparent)"
 
-// Section background = the hero's circle pattern (PlainBubbles paints its own aqua base)
+// Section background = the watercolor paper (WatercolorBackdrop paints its own cream base)
 const sectionBg = "var(--color-bg-pattern-base)"
 
 // Text sitting directly on the circle pattern (colors: globals.css → --color-on-pattern*)
@@ -52,13 +55,15 @@ const onBgLineStyle = {
 } as const
 
 const dividerLineStyle = {
-  background: "linear-gradient(to right, transparent, var(--color-motif-medium), transparent)",
+  background: "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-accent) 60%, transparent), transparent)",
 } as const
 
+// Light paper card — same treatment as the love story + details cards
 const cardStyle = {
-  background: PAPER,
+  background:
+    "radial-gradient(ellipse 80% 40% at 50% 0%, #ffffff 0%, transparent 70%), linear-gradient(180deg, #fffdf9 0%, #fbf4ea 100%)",
   boxShadow:
-    "0 26px 56px -30px color-mix(in srgb, var(--color-welcome-navy) 55%, transparent), inset 0 1px 0 rgb(255 255 255 / 80%)",
+    "inset 0 0 0 1px color-mix(in srgb, var(--color-motif-accent) 24%, transparent), inset 0 1px 0 rgb(255 255 255 / 90%), 0 2px 6px -2px rgb(92 62 40 / 12%), 0 30px 60px -32px rgb(92 62 40 / 42%)",
 } as const
 
 const CORNER_DECO_CLASS =
@@ -636,7 +641,7 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
       >
         <div
           className="absolute inset-0 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 rounded-md"
-          style={{ background: "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-silver) 70%, transparent), transparent)" }}
+          style={{ background: "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-accent) 45%, transparent), transparent)" }}
         />
         <p
           className={`${theSeasons.className} relative ${textAlign} transition-all duration-300 max-w-full break-words`}
@@ -750,8 +755,8 @@ export function Entourage({ sponsorsList }: { sponsorsList?: SponsorsList } = {}
       className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full overflow-hidden`}
       style={{ background: sectionBg }}
     >
-      {/* Same circle pattern as the hero */}
-      <PlainBubbles />
+      {/* Same watercolor paper as the hero, details and love story */}
+      <WatercolorBackdrop />
       <Section
         id="entourage"
         className="relative z-10 overflow-hidden pt-5 pb-5 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14"

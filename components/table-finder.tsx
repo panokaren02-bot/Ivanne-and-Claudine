@@ -19,6 +19,7 @@ import { useSiteConfig } from "@/hooks/use-site-config"
 import { layeredSectionTitleSize, sectionType } from "@/lib/section-typography"
 import { sectionBackground } from "@/lib/section-background"
 import { TintedDeco } from "@/components/tinted-deco"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -27,6 +28,10 @@ const cinzel = Cinzel({
 
 const theSeasons = localFont({
   src: "../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -463,6 +468,8 @@ export function TableFinder() {
       className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative min-h-screen overflow-x-hidden`}
       style={{ background: sectionBackground }}
     >
+      {/* Same watercolor paper as the invitation sections */}
+      <WatercolorBackdrop fixed />
       <div className="pointer-events-none absolute left-0 top-0 z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {tfDecos.topLeft ? <TintedDeco src={tfDecos.topLeft} className={CORNER_DECO_CLASS} /> : null}

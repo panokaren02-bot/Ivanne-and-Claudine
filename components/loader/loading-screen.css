@@ -959,6 +959,7 @@
 }
 
 .home-hero--plain .home-hero-plain-corners {
+  --color-deco: var(--color-deco-corner);
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -1906,6 +1907,7 @@
 
 /* Viewport corner ornaments + inset gold double frame */
 .loading-screen__plain-corners {
+  --color-deco: var(--color-deco-corner);
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -3374,4 +3376,211 @@
 /* Top ornament above "Save the Date" — nudged slightly up */
 .loading-screen--plain .loading-screen__plain-ornament {
   margin-top: -0.75rem;
+}
+
+/* ==========================================================================
+   Love story chapters — watercolor background, light paper cards and a large
+   ghost numeral behind each card that alternates left / right.
+   ========================================================================== */
+.love-story-plain-track {
+  isolation: isolate;
+}
+
+/* Ghost chapter numeral */
+.story-plain-ghost-number {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  translate: 0 -50%;
+  font-size: clamp(9rem, 38vw, 22rem);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-motif-accent) 45%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-motif-accent) 22%, transparent) 0%,
+    color-mix(in srgb, var(--color-motif-accent) 6%, transparent) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+  user-select: none;
+}
+
+.story-plain-ghost-number--left {
+  left: clamp(-1.5rem, -2vw, 0rem);
+}
+
+.story-plain-ghost-number--right {
+  right: clamp(-1.5rem, -2vw, 0rem);
+}
+
+@media (min-width: 768px) {
+  .story-plain-ghost-number--left {
+    left: max(2vw, calc(50% - 30rem));
+  }
+
+  .story-plain-ghost-number--right {
+    right: max(2vw, calc(50% - 30rem));
+  }
+}
+
+/* Light paper card */
+.love-story-plain-track .story-plain-card {
+  border: 1px solid color-mix(in srgb, var(--color-motif-accent) 26%, transparent);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #ffffff 0%, transparent 70%),
+    linear-gradient(180deg, #fffdf9 0%, #fbf4ea 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 6px -2px rgba(92, 62, 40, 0.12),
+    0 26px 50px -30px rgba(92, 62, 40, 0.4);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  overflow: visible;
+}
+
+/* Fine paper grain on the card */
+.love-story-plain-track .story-plain-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.42  0 0 0 0 0.3  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23c)'/></svg>");
+}
+
+/* Inner frame with small corner notches */
+.love-story-plain-track .story-plain-card .wedding-frame-inner {
+  inset: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--color-motif-accent) 30%, transparent);
+  border-radius: 0.85rem;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / calc(100% - 3rem) 1px no-repeat,
+    linear-gradient(#000 0 0) bottom / calc(100% - 3rem) 1px no-repeat,
+    linear-gradient(#000 0 0) left / 1px calc(100% - 3rem) no-repeat,
+    linear-gradient(#000 0 0) right / 1px calc(100% - 3rem) no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top / calc(100% - 3rem) 1px no-repeat,
+    linear-gradient(#000 0 0) bottom / calc(100% - 3rem) 1px no-repeat,
+    linear-gradient(#000 0 0) left / 1px calc(100% - 3rem) no-repeat,
+    linear-gradient(#000 0 0) right / 1px calc(100% - 3rem) no-repeat;
+}
+
+/* Chapter label as a small pill */
+.love-story-plain-track .story-plain-chapter-label {
+  display: inline-block;
+  padding: 0.35em 1.1em 0.3em;
+  border: 1px solid color-mix(in srgb, var(--color-motif-accent) 40%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-motif-accent) 8%, #fffaf3);
+  color: var(--color-motif-accent);
+  letter-spacing: 0.26em;
+}
+
+.love-story-plain-track .story-plain-card__dot {
+  background: var(--color-motif-accent);
+  box-shadow:
+    0 0 0 4px #fffaf3,
+    0 0 0 5px color-mix(in srgb, var(--color-motif-accent) 30%, transparent);
+}
+
+.love-story-plain-track .story-plain-chapter-line {
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-motif-accent) 40%, transparent) 20%,
+    color-mix(in srgb, var(--color-motif-accent) 65%, transparent) 50%,
+    color-mix(in srgb, var(--color-motif-accent) 40%, transparent) 80%,
+    transparent
+  );
+}
+
+.love-story-plain-track::before {
+  background: color-mix(in srgb, var(--color-motif-accent) 30%, transparent);
+}
+
+.love-story-plain-track .story-plain-chapter-connector__stem {
+  background: color-mix(in srgb, var(--color-motif-accent) 40%, transparent);
+}
+
+/* Card-anchored ghost numeral — only used on phones */
+.story-plain-card__ghost {
+  display: none;
+}
+
+/* Phones: compact — the numeral rides the card's top edge (half above, half
+   over the card behind the text), alternating left / right */
+@media (max-width: 767px) {
+  .love-story-plain-track {
+    padding-top: clamp(2.5rem, 13vw, 3.5rem);
+  }
+
+  .story-plain-ghost-number {
+    display: none;
+  }
+
+  .story-plain-card__ghost {
+    display: block;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    translate: 0 -52%;
+    font-size: clamp(5.25rem, 26vw, 7.5rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1.25px color-mix(in srgb, var(--color-motif-accent) 50%, transparent);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-motif-accent) 34%, transparent) 0%,
+      color-mix(in srgb, var(--color-motif-accent) 34%, transparent) 50%,
+      color-mix(in srgb, var(--color-motif-accent) 10%, transparent) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .story-plain-card__ghost--left {
+    left: 1.75rem;
+  }
+
+  .story-plain-card__ghost--right {
+    right: 1.75rem;
+  }
+}
+
+/* Timeline thread that fills in (terracotta) over the faint base thread as you scroll */
+.story-plain-thread-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 2px;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-motif-accent) 15%, transparent) 0%,
+    color-mix(in srgb, var(--color-motif-accent) 75%, transparent) 60%,
+    var(--color-motif-accent) 100%
+  );
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-motif-accent) 45%, transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .story-plain-thread-progress {
+    width: 1.5px;
+    opacity: 0.6;
+  }
 }

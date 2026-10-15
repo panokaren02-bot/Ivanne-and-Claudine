@@ -12,7 +12,6 @@ import {
   type ReactNode,
 } from "react"
 import { useSearchParams } from "next/navigation"
-import dynamic from "next/dynamic"
 import Link from "next/link"
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "motion/react"
 import { Heart, Check, X, Sparkles, MapPin } from "lucide-react"
@@ -23,6 +22,7 @@ import { useSiteConfig } from "@/hooks/use-site-config"
 import { Hero as InvitationHero } from "@/components/loader/Hero"
 import { LoadingScreen } from "@/components/loader/LoadingScreen"
 import { InvitePhotoBackdrop } from "@/components/loader/invite-photo-backdrop"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import { sectionType, welcomeTitleSize } from "@/lib/section-typography"
 import { sectionBackground } from "@/lib/section-background"
 import { siteConfig as defaultSiteConfig } from "@/content/site"
@@ -30,9 +30,6 @@ import { parseWeddingDate } from "@/lib/wedding-date"
 import type { ProposalRole } from "@/lib/proposal-types"
 import { parseInviteeNameFromSearchParams } from "@/lib/proposal-invite-link"
 import { TintedDeco } from "@/components/tinted-deco"
-import { useCssColor } from "@/hooks/use-css-color"
-
-const Silk = dynamic(() => import("@/components/silk"), { ssr: false })
 
 const proposalEntryEase = [0.22, 1, 0.36, 1] as const
 const CINEMATIC_ENTRY_MS = 3000
@@ -79,6 +76,10 @@ const inter = proposalMixedTextInter
 
 const theSeasons = localFont({
   src: "../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -824,13 +825,6 @@ function FlowHeader({
   )
 }
 
-/** "rgb(r, g, b)" → "#rrggbb" (canvas-only consumers such as Silk). */
-function rgbToHex(rgb: string) {
-  const m = rgb.match(/\d+/g)
-  if (!m || m.length < 3 || rgb.startsWith("#")) return rgb
-  return `#${m.slice(0, 3).map((n) => Number(n).toString(16).padStart(2, "0")).join("")}`
-}
-
 /* ── Page ─────────────────────────────────────────────────────────────────── */
 
 type ProposalFlowState = "question" | "yes_details" | "yes_submitted" | "no_clicked" | "no_submitted"
@@ -885,8 +879,6 @@ function ProposalPageInner({ role }: ProposalPageProps) {
 
   const siteConfig = useSiteConfig()
   const { labels } = siteConfig.proposal
-  // Silk paints on canvas, so resolve the CSS token to a hex color
-  const silkColor = rgbToHex(useCssColor("--color-motif-accent", "#C48C73"))
   const copyKey = copyKeyFor(role)
   const copy = siteConfig.proposal.copy[copyKey]
   const confirmedDisplayName = (inviteeFromLink || preferredName).trim()
@@ -1002,11 +994,8 @@ function ProposalPageInner({ role }: ProposalPageProps) {
       className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative min-h-[100dvh] select-none px-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:px-6 sm:py-16 md:py-20 ${pageScrollLocked ? "overflow-hidden" : "overflow-x-hidden"}`}
       style={{ background: sectionBackground, color: CREAM }}
     >
-      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.22]" aria-hidden>
-        <Suspense fallback={<div className="h-full w-full" style={{ background: sectionBackground }} />}>
-          <Silk speed={6} scale={1} color={silkColor} noiseIntensity={0} rotation={0.25} />
-        </Suspense>
-      </div>
+      {/* Same watercolor paper as the invitation sections */}
+      <WatercolorBackdrop fixed />
 
       {loadingOverlayVisible && (
         <div className="invite-photo-backdrop-wrap invite-photo-backdrop-wrap--loading" aria-hidden="true">

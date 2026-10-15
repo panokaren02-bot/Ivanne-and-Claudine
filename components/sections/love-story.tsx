@@ -7,12 +7,16 @@ import { StorySection } from "@/components/StorySection"
 import { layeredSectionTitleSize, sectionType } from "@/lib/section-typography"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { siteConfig as defaultSiteConfig } from "@/content/site"
-import { PlainBubbles } from "@/components/loader/PlainBubbles"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import "@/components/loader/loading-screen.css"
 import { TintedDeco } from "@/components/tinted-deco"
 
 const theSeasons = localFont({
   src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -25,7 +29,7 @@ const aboveTheBeyond = localFont({
 
 const revealEase = [0.22, 1, 0.36, 1] as const
 
-// Section background = the hero's circle pattern (PlainBubbles paints its own aqua base)
+// Section background = the watercolor paper (WatercolorBackdrop paints its own cream base)
 const sectionBg = "var(--color-bg-pattern-base)"
 
 // Soft white halo so text stays readable over the circles (globals.css → --color-on-pattern-glow)
@@ -79,7 +83,7 @@ function LoveStoryTitle({
       }
     >
       <span
-        className={`${theSeasons.className} block pb-1 uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.13em] md:tracking-[0.14em]`}
+        className={`${theSeasons.className} block pb-1 pl-[0.08em] uppercase leading-[0.78] tracking-[0.08em] min-[400px]:pl-[0.11em] min-[400px]:tracking-[0.11em] sm:pl-[0.13em] sm:tracking-[0.13em] md:pl-[0.14em] md:tracking-[0.14em]`}
         style={{
           fontSize: "var(--title-size)",
           color: "var(--color-welcome-navy)",
@@ -188,15 +192,15 @@ export function LoveStory() {
       className={`love-story-root ${theSeasons.variable} ${aboveTheBeyond.variable} relative min-h-screen w-full overflow-x-hidden`}
       style={{ background: sectionBg }}
     >
-      {/* Same circle pattern as the other sections */}
-      <PlainBubbles />
+      {/* Same watercolor paper as the hero + envelope screens */}
+      <WatercolorBackdrop />
       <SectionCornerDecos cornerDecos={cornerDecos} />
 
       <header
-        className="relative z-20 px-4 pb-6 pt-8 text-center sm:px-6 sm:pb-4 sm:pt-10 md:px-8 md:pt-12"
+        className="relative z-20 flex justify-center px-4 pb-6 pt-16 text-center sm:px-6 sm:pb-4 sm:pt-20 md:px-8 md:pt-24"
       >
         <motion.div
-          className="relative mx-auto max-w-5xl @container/love-story"
+          className="relative mx-auto w-full max-w-5xl @container/love-story"
           initial={reduceMotion ? false : { opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}

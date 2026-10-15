@@ -18,7 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { useSiteConfig } from "@/hooks/use-site-config"
-import { PlainBubbles } from "@/components/loader/PlainBubbles"
+import { WatercolorBackdrop } from "@/components/loader/WatercolorBackdrop"
 import { sectionType } from "@/lib/section-typography"
 import { Cinzel } from "next/font/google"
 import { TintedDeco } from "@/components/tinted-deco"
@@ -30,6 +30,10 @@ const cinzel = Cinzel({
 
 const theSeasons = localFont({
   src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  // Letters only: digits + punctuation fall through to Playfair ("Seasons Numerals", app/globals.css)
+  declarations: [{ prop: "unicode-range", value: "U+0020, U+0041-005A, U+0061-007A, U+00C0-00D6, U+00D8-00F6, U+00F8-00FF, U+0152-0153" }],
+  fallback: ["'Seasons Numerals'", "serif"],
+  adjustFontFallback: false,
   display: "swap",
   variable: "--font-the-seasons",
 })
@@ -57,7 +61,7 @@ const palette = {
   accent: TEAL,
 } as const
 
-// Section background = the hero's circle pattern (PlainBubbles paints its own aqua base)
+// Section background = the watercolor paper (WatercolorBackdrop paints its own cream base)
 const sectionBg = "var(--color-bg-pattern-base)"
 
 // Text sitting directly on the circle pattern (colors: globals.css → --color-on-pattern*)
@@ -297,8 +301,8 @@ export function Footer() {
       className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full overflow-hidden`}
       style={{ background: sectionBg }}
     >
-      {/* Same circle pattern as the hero */}
-      <PlainBubbles />
+      {/* Same watercolor paper as the hero and the other sections */}
+      <WatercolorBackdrop />
 
       {/* Corner decorations (from site.ts) */}
       <div className="pointer-events-none absolute left-0 top-0 z-10">

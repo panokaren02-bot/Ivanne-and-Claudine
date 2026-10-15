@@ -2400,6 +2400,7 @@
 }
 
 .env-invite-screen--plain .env-invite-plain-corners {
+  --color-deco: var(--color-deco-corner);
   position: fixed;
   inset: 0;
   z-index: 2;
@@ -2438,27 +2439,12 @@
     max-width: 320px;
   }
 
-  .env-invite-screen--plain::before {
-    display: block;
-    background:
-      radial-gradient(
-        920px 620px at 50% 18%,
-        color-mix(in srgb, var(--env-plain-accent) 14%, transparent) 0,
-        transparent 58%
-      ),
-      radial-gradient(
-        560px 400px at 10% 86%,
-        color-mix(in srgb, var(--env-blush) 16%, transparent) 0,
-        transparent 55%
-      );
-  }
 }
 
 @media (max-width: 767px) {
   .env-invite-screen--plain {
     --env-letter-w: clamp(240px, calc(var(--env-width) * 0.62), 360px);
     --env-letter-h: clamp(280px, calc(var(--env-width) * 0.7), 420px);
-    background: var(--env-plain-bg);
   }
 
   .env-invite-screen--plain .env-invite-emerge-stack .env-invite-letter,
@@ -2736,4 +2722,241 @@
   line-height: 1.15;
   color: var(--invite-script);
   -webkit-text-fill-color: var(--invite-script);
+}
+
+/* ==========================================================================
+   Realistic paper — cotton-laid grain + fibers over every envelope panel,
+   soft directional light, and a wax seal that stays put on the pocket.
+   ========================================================================== */
+.env-invite-envelope {
+  /* woven linen: fine horizontal + vertical threads, neutral gray for soft-light */
+  --env-linen: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='l' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='0.95 0.035' numOctaves='2' seed='2' stitchTiles='stitch' result='h'/><feTurbulence type='fractalNoise' baseFrequency='0.035 0.95' numOctaves='2' seed='8' stitchTiles='stitch' result='v'/><feComposite in='h' in2='v' operator='arithmetic' k2='0.5' k3='0.5'/><feColorMatrix values='0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0 1'/><feComponentTransfer><feFuncR type='linear' slope='2.4' intercept='-0.7'/><feFuncG type='linear' slope='2.4' intercept='-0.7'/><feFuncB type='linear' slope='2.4' intercept='-0.7'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23l)'/></svg>");
+  /* fine diagonal cross-weave like the swatch */
+  --env-weave:
+    repeating-linear-gradient(45deg, rgba(60, 35, 20, 0.12) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(255, 245, 230, 0.1) 0 1px, transparent 1px 4px);
+}
+
+/* Shared texture layer for each panel (pseudo-elements inherit the clip-path) */
+.env-invite-front-closed::before,
+.env-invite-back::before,
+.env-invite-pocket-front::before,
+.env-invite-pocket-left::before,
+.env-invite-pocket-right::before,
+.env-invite-flap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--env-weave), var(--env-linen);
+  background-size: auto, auto, 260px 260px;
+  mix-blend-mode: soft-light;
+  opacity: 0.85;
+  border-radius: inherit;
+}
+
+.env-invite-flap::before {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* Flap: light from upper-left, thickness shadow cast onto the front along its edges */
+.env-invite-flap {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(180deg, var(--env-highlight) 0%, var(--env-base) 62%, var(--env-fold) 100%);
+  box-shadow: none;
+}
+
+.env-invite-flap-shadow {
+  background: linear-gradient(180deg, rgba(92, 70, 44, 0) 40%, rgba(92, 70, 44, 0.22) 100%);
+  filter: blur(3px);
+  transform: translateY(5px);
+}
+
+/* Front: gentle falloff from a soft light at the top-left */
+.env-invite-front-closed {
+  background:
+    radial-gradient(ellipse 80% 70% at 22% 12%, rgba(255, 255, 255, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 85% 100%, rgba(120, 92, 60, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, var(--env-envelope) 0%, var(--env-base) 100%);
+}
+
+/* Side + bottom folds overlap the front — tiny lift shadows along their edges */
+.env-invite-fold--bl {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(125deg, rgba(92, 70, 44, 0) 70%, rgba(92, 70, 44, 0.1) 100%);
+}
+
+.env-invite-fold--br {
+  background:
+    linear-gradient(245deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(235deg, rgba(92, 70, 44, 0) 60%, rgba(92, 70, 44, 0.14) 100%);
+}
+
+.env-invite-fold--b {
+  background: linear-gradient(0deg, rgba(92, 70, 44, 0.1) 0%, rgba(255, 255, 255, 0.08) 75%, rgba(92, 70, 44, 0.06) 100%);
+}
+
+.env-invite-envelope .env-invite-creases line:nth-child(1),
+.env-invite-envelope .env-invite-creases line:nth-child(2) {
+  stroke: rgba(255, 255, 255, 0.55);
+}
+
+/* Inner liner border on the closed front reads as printed, not paper — drop it */
+.env-invite-front-closed::after,
+.env-invite-back::after {
+  display: none;
+}
+
+.env-invite-back {
+  border-color: rgba(122, 94, 62, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(122, 94, 62, 0.12);
+}
+
+/* Wax seal: always above the pocket so it stays whole where it was pressed */
+.env-invite-envelope .env-invite-seal-wrap {
+  z-index: 45;
+}
+
+.env-invite-envelope .env-invite-seal-btn {
+  filter:
+    drop-shadow(0 1px 1px rgba(70, 45, 25, 0.35))
+    drop-shadow(0 6px 10px rgba(70, 45, 25, 0.22));
+}
+
+@keyframes env-seal-breathe {
+  0%,
+  100% {
+    filter:
+      drop-shadow(0 1px 1px rgba(70, 45, 25, 0.35))
+      drop-shadow(0 6px 10px rgba(70, 45, 25, 0.22));
+  }
+  50% {
+    filter:
+      drop-shadow(0 1px 1px rgba(70, 45, 25, 0.35))
+      drop-shadow(0 8px 16px rgba(160, 120, 70, 0.3));
+  }
+}
+
+/* ==========================================================================
+   Detailed envelope (plain mode) — SVG fold creases, cast shadows, the lit
+   flap edge and the flap's inner liner (components/loader/Hero.tsx)
+   ========================================================================== */
+.env-invite-paper-folds {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.env-invite-paper-folds--pocket {
+  z-index: 4;
+}
+
+.env-invite-paper-folds__crease {
+  fill: none;
+  stroke: rgba(92, 70, 44, 0.3);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+.env-invite-paper-folds__edge {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+.env-invite-paper-folds__shadow {
+  fill: none;
+  stroke: rgba(92, 70, 44, 0.28);
+  stroke-linejoin: round;
+}
+
+.env-invite-paper-folds__shadow--contents {
+  stroke: rgba(92, 70, 44, 0.2);
+}
+
+/* Light catching the folded edge of the top flap */
+.env-invite-flap-edge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.env-invite-flap-edge polyline {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+/* Inside of the flap — a slightly deeper liner paper, revealed mid-swing */
+.env-invite-flap-liner {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(45deg, rgba(122, 92, 58, 0.1) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(255, 252, 245, 0.35) 0 1px, transparent 1px 4px),
+    var(--env-linen) 0 0 / 260px 260px,
+    linear-gradient(0deg, var(--color-envelope-liner-deep) 0%, var(--color-envelope-liner) 70%);
+  background-blend-mode: normal, normal, soft-light, normal;
+  box-shadow: inset 0 0 18px rgba(92, 70, 44, 0.18);
+  transition: opacity 0.12s linear 0.5s;
+}
+
+.env-invite-screen[data-phase="flap-open"] .env-invite-flap-liner,
+.env-invite-screen[data-phase="rising"] .env-invite-flap-liner,
+.env-invite-screen[data-phase="revealed"] .env-invite-flap-liner,
+.env-invite-screen[data-phase="cta"] .env-invite-flap-liner,
+.env-invite-screen[data-phase="exiting"] .env-invite-flap-liner {
+  opacity: 1;
+}
+
+.env-invite-screen[data-phase="flap-open"] .env-invite-flap-edge,
+.env-invite-screen[data-phase="rising"] .env-invite-flap-edge,
+.env-invite-screen[data-phase="revealed"] .env-invite-flap-edge,
+.env-invite-screen[data-phase="cta"] .env-invite-flap-edge {
+  opacity: 0;
+  transition: opacity 0.12s linear 0.5s;
+}
+
+/* Longer titles break onto two lines before a joining word */
+.env-invite-letter-label__break {
+  display: block;
+  flex-basis: 100%;
+  width: 100%;
+  height: 0;
+}
+
+/* Inside of the open envelope shows the beige lining */
+.env-invite-screen[data-phase="flap-open"] .env-invite-envelope .env-invite-back,
+.env-invite-screen[data-phase="rising"] .env-invite-envelope .env-invite-back,
+.env-invite-screen[data-phase="revealed"] .env-invite-envelope .env-invite-back,
+.env-invite-screen[data-phase="cta"] .env-invite-envelope .env-invite-back,
+.env-invite-screen[data-phase="exiting"] .env-invite-envelope .env-invite-back {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(92, 70, 44, 0.16) 0%, transparent 70%),
+    linear-gradient(180deg, var(--color-envelope-liner-deep) 0%, var(--color-envelope-liner) 100%);
+}
+
+/* Cream highlights read too bright on terracotta — soften the fold lights */
+.env-invite-paper-folds__edge {
+  stroke: rgba(255, 228, 210, 0.45);
+}
+
+.env-invite-flap-edge polyline {
+  stroke: rgba(255, 228, 210, 0.55);
 }
