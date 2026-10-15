@@ -20,7 +20,7 @@ export function TintedDeco({ src, className = '', style }: TintedDecoProps) {
       style={{ ...style, '--deco-src': `url("${src}")` } as React.CSSProperties}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" className="tinted-deco__img" />
+      <img src={src} alt="" className="tinted-deco__img" loading="lazy" decoding="async" />
     </span>
   );
 }

@@ -11,7 +11,6 @@ import { anastasiaScript } from "@/lib/fonts"
 
 const canonicalUrl = canonicalSiteUrl
 const desktopHero = siteConfig.linkPreviewImage
-const mobileHero = siteConfig.linkPreviewImage
 const eventImageUrl = `${canonicalUrl}${desktopHero}`
 const OG_IMAGE_FALLBACK = `${canonicalUrl}${desktopHero}`
 
@@ -191,12 +190,11 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=yes,email=no,address=no" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Lavishly+Yours&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Style+Script&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+        {/* One combined request instead of six render-blocking stylesheets */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:wght@400;500;600&family=Lavishly+Yours&family=Style+Script&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
+          rel="stylesheet"
+        />
         <link
           rel="preload"
           href="/fonts/AnastasiaScript.ttf"
@@ -214,8 +212,6 @@ export default function RootLayout({
             {...(index === 0 ? { fetchPriority: "high" as const } : {})}
           />
         ))}
-        <link rel="preload" as="image" href={mobileHero} media="(max-width: 767px)" />
-        <link rel="preload" as="image" href={desktopHero} media="(min-width: 768px)" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body

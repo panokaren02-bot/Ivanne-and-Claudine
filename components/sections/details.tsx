@@ -520,9 +520,8 @@ function EventVenueCard({
                     isActive && images.length > 1 ? "scale-[1.08] group-hover:scale-[1.12]" : "scale-100"
                   }`}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1280px"
-                  // Load every slide up front so the next one is ready before it fades in
-                  priority={index === 0}
-                  loading={index === 0 ? undefined : "eager"}
+                  // Lazy: slides fetch as the section nears the viewport, not on page load
+                  loading="lazy"
                 />
               </div>
             )

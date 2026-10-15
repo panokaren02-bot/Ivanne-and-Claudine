@@ -155,6 +155,9 @@ export function InvitationPage({ sponsorsList, showEntourage = true }: Invitatio
   }, [])
 
   const detailsVisible = appState === AppState.DETAILS
+  // Below-the-fold sections and the WebGL backdrop mount once the loading screen is done,
+  // so their JS, images and data requests don't compete with the loader on first paint.
+  const sectionsMounted = appState !== AppState.LOADING
   const pageScrollLocked = appState !== AppState.DETAILS
   const cinematicEntry = enteringFromInvite && detailsVisible
 
@@ -207,7 +210,7 @@ export function InvitationPage({ sponsorsList, showEntourage = true }: Invitatio
               />
             )}
 
-            {enableDecor && (
+            {enableDecor && sectionsMounted && (
               <motion.div
                 className="fixed inset-0 z-0 pointer-events-none"
                 variants={silkBackdropVariants}
@@ -259,6 +262,8 @@ export function InvitationPage({ sponsorsList, showEntourage = true }: Invitatio
                 transition={cinematicEntry ? undefined : { duration: 0.01 }}
               >
                <Welcome />
+              {sectionsMounted && (
+              <>
               {/* <CoupleVideo />  */}
               <LoveStory />
               <Countdown />
@@ -277,6 +282,8 @@ export function InvitationPage({ sponsorsList, showEntourage = true }: Invitatio
               <SnapShare />
               <SeeYouThere />
               <Footer />
+              </>
+              )}
               </motion.div>
             </div>
           </motion.div>

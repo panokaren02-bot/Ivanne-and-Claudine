@@ -7,7 +7,7 @@ import localFont from "next/font/local"
 export const anastasiaScript = localFont({
   src: "../Font/AnastasiaScript.ttf",
   display: "swap",
-  preload: true,
+  preload: false, // same file is preloaded from /fonts in app/layout.tsx; avoid a duplicate download
   variable: "--font-anastasia-script",
   weight: "400",
   style: "normal",

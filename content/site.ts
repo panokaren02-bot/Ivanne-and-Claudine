@@ -261,9 +261,9 @@ const DISPLAY_MODE = "plain" as "photos" | "plain"
 
 // ── Shared images ───────────────────────────────────────────────────────────
 const BRAND = {
-  monogram: "/monogram/monogram.png",
+  monogram: "/monogram/monogram.webp",
   coupleNameImage: "/Details/newcoupelNames.png", // couple-name lettering (loader, envelope)
-  seal: "/monogram/seal.png", // envelope wax seal
+  seal: "/monogram/seal.webp", // envelope wax seal
   backgroundMusic: "/background_music/Goodness Of God X Oceans X Gratitude (Wedding Entrance version).mp3",
 }
 
@@ -283,16 +283,18 @@ const COUPLE_PHOTOS = [
 
 // ── Decorations ─────────────────────────────────────────────────────────────
 // Change a path here to swap it on every section at once.
+// These .webp files are alpha-only masks (drawn by components/tinted-deco.tsx);
+// regenerate from the .png originals if you swap one.
 // To change ONE section only, override it there, e.g. decos: { ...SECTION_DECOS, footerVine: "" }
 const DECOR = {
-  cornerTopLeft: "/deco/top-left-deco.png",
-  cornerTopRight: "/deco/top-right-deco.png",
-  cornerBottomLeft: "/deco/bottom-left-deco.png",
-  cornerBottomRight: "/deco/bottom-right-deco.png",
-  headerOrnament: "/deco/lovestorydeco/Elegant-Eucalyptus-centerdot.png", // small sprig above titles
-  footerVine: "/deco/lovestorydeco/Elegant-Eucalyptus-bottom.png", // long vine at section ends
-  sideLeft: "/deco/lovestorydeco/Elegant-Eucalyptus-Left.png", // love story side sprigs
-  sideRight: "/deco/lovestorydeco/Elegant-Eucalyptus-Right.png",
+  cornerTopLeft: "/deco/top-left-deco.webp",
+  cornerTopRight: "/deco/top-right-deco.webp",
+  cornerBottomLeft: "/deco/bottom-left-deco.webp",
+  cornerBottomRight: "/deco/bottom-right-deco.webp",
+  headerOrnament: "/deco/lovestorydeco/Elegant-Eucalyptus-centerdot.webp", // small sprig above titles
+  footerVine: "/deco/lovestorydeco/Elegant-Eucalyptus-bottom.webp", // long vine at section ends
+  sideLeft: "/deco/lovestorydeco/Elegant-Eucalyptus-Left.webp", // love story side sprigs
+  sideRight: "/deco/lovestorydeco/Elegant-Eucalyptus-Right.webp",
 }
 
 // The four corners as one set
@@ -862,7 +864,7 @@ export const siteConfig = {
   // Small decorations on each message card — leave "" to hide
   messageWall: {
     cardDecos: {
-      topRight: DECOR.cornerTopRight, // sprig tucked in the card's top-right corner
+      topRight: "/deco/top-right-deco-color.webp", // sprig tucked in the card's top-right corner (full-color, shown as a plain <img>)
       bottomLeft: "", // e.g. DECOR.cornerBottomLeft (sits behind the text — keep it subtle)
     },
   },
