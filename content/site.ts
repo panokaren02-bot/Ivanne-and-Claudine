@@ -85,7 +85,7 @@ const TIMES = {
 // ── Venues ──────────────────────────────────────────────────────────────────
 
 const CEREMONY_VENUE = {
-  name: "Metropolitan Cathedral Parish of St. John the Evangelist",
+  name: "St. John the Evangelist Cathedral",
   address: "Burgos St, Downtown District, Dagupan City, Pangasinan",
   map: "https://maps.app.goo.gl/gyVBV2CdvQ4KgAC87",
   photos: ["/Details/ceremony.jpg", "/Details/ceremony.webp", "/Details/ceremony (2).png"],
@@ -94,7 +94,7 @@ const RECEPTION_VENUE = {
   name: "The Village Royale",
   address: "Bued, Calasiao, Pangasinan, Philippines",
   map: "https://maps.app.goo.gl/DqfzZCzJHT76Z1vh8",
-  photos: ["/Details/reception (1).jpg", "/Details/reception (2).jpg"],
+  photos: ["/Details/reception (1).jpg","/Details/reception2.png"],
 }
 
 // ── Venue cards (Event Details section) ─────────────────────────────────────
@@ -1030,7 +1030,7 @@ export const siteConfig = {
     // {couple} → "Groom & Bride" nicknames. "" hides a line or image.
     qrCard: {
       coupleNameImage: BRAND.coupleNameImage, // unused: the card sets the names in type like the loader
-      coupleImage: "/Details/coupleImages.png", // couple illustration beside the text
+      coupleImage: "/Details/proposalImage.png", // couple illustration beside the text
       eyebrow: "The wedding of",
       title: "Find Your Table",
       script: "please be seated",
@@ -1053,7 +1053,7 @@ export const siteConfig = {
   proposal: {
     decos: { ...CORNER_DECOS },
     coupleNameImage: BRAND.coupleNameImage, // unused: names are set in type like the loader
-    coupleImage: "/Details/coupleImages.png", // couple illustration above the question
+    coupleImage: "/Details/proposalImage.png", // couple illustration above the question
     ornament: DECOR.headerOrnament, // small sprig at the top of the card; "" to hide
     // Eucalyptus sprigs on either side of the couple name; "" to hide one
     nameDecos: { left: DECOR.sideLeft, right: DECOR.sideRight },

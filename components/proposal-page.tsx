@@ -374,13 +374,38 @@ function Paragraphs({ lines, className = "" }: { lines: readonly string[]; class
 
 /* ── Card shell ───────────────────────────────────────────────────────────── */
 
-function ProposalCard({ children }: { children: ReactNode }) {
+function ProposalCard({
+  children,
+  top,
+  band,
+  bottom,
+}: {
+  children?: ReactNode
+  /** Padded upper block (used with band + bottom instead of children) */
+  top?: ReactNode
+  /** Inset portrait band between letter and response (same horizontal padding as the card body) */
+  band?: ReactNode
+  bottom?: ReactNode
+}) {
   // Arched top like a chapel window; the frames follow the same curve
   const arch = "rounded-t-[9rem] rounded-b-[1.5rem] sm:rounded-t-[15rem] sm:rounded-b-[2rem]"
   const archInner = "rounded-t-[8.4rem] rounded-b-[1.1rem] sm:rounded-t-[14rem] sm:rounded-b-[1.5rem]"
   const archInnermost = "rounded-t-[8rem] rounded-b-[0.85rem] sm:rounded-t-[13.4rem] sm:rounded-b-[1.2rem]"
+  const padX = "px-6 sm:px-14 md:px-16"
+  const split = top !== undefined && bottom !== undefined
+
+  const body = split ? (
+    <div className="relative z-20 text-center">
+      <div className={`${padX} pb-2 pt-16 sm:pb-3 sm:pt-24`}>{top}</div>
+      {band ? <div className={`relative z-[1] ${padX} py-5 sm:py-6`}>{band}</div> : null}
+      <div className={`${padX} pb-12 pt-2 sm:pb-16 sm:pt-3`}>{bottom}</div>
+    </div>
+  ) : (
+    <div className={`relative z-20 ${padX} pb-12 pt-16 text-center sm:pb-16 sm:pt-24`}>{children}</div>
+  )
+
   return (
-    <div className="relative mx-auto w-full max-w-2xl">
+    <div className="relative mx-auto w-full max-w-3xl">
       <div className={`pointer-events-none absolute -inset-4 opacity-70 blur-2xl ${arch}`} style={ambientGlowStyle} aria-hidden />
       <div
         className={`relative overflow-hidden border ${arch}`}
@@ -405,7 +430,7 @@ function ProposalCard({ children }: { children: ReactNode }) {
           aria-hidden
         />
 
-        <div className="relative z-20 px-6 pb-12 pt-16 text-center sm:px-14 sm:pb-16 sm:pt-24 md:px-16">{children}</div>
+        {body}
       </div>
     </div>
   )
@@ -652,7 +677,7 @@ function ProposalLetter({
   const greetingName = inviteeName.trim() || "Friend"
 
   return (
-    <div className="mx-auto w-full max-w-lg space-y-7 text-center sm:space-y-8">
+    <div className="mx-auto w-full max-w-xl space-y-7 text-center sm:max-w-2xl sm:space-y-8">
       {/* Greeting */}
       <Reveal className="space-y-3">
         <p
@@ -680,27 +705,27 @@ function ProposalLetter({
       {/* Role / name summary (wedding party only, when the link carries a name) */}
       {copyKey === "party" && inviteeName.trim() ? (
         <Reveal>
-        <div
-          className="mx-auto grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-2xl border"
-          style={{ borderColor: GOLD_BORDER_SOFT, background: GOLD_BORDER_SOFT }}
-        >
-          {[
-            { label: labels.roleOffered, value: roleTitle, color: TITLE },
-            { label: labels.preparedFor, value: inviteeName.trim(), color: SCRIPT_GREEN },
-          ].map((cell) => (
-            <div key={cell.label} className="px-3 py-4 sm:px-4 sm:py-5" style={{ background: IVORY }}>
-              <SmallCaps className="text-[0.58rem] sm:text-[0.62rem]">
-                <T text={cell.label} />
-              </SmallCaps>
-              <p
-                className={`${theSeasons.className} mt-1.5 text-[0.98rem] tracking-wide [overflow-wrap:anywhere] sm:text-lg`}
-                style={{ color: cell.color }}
-              >
-                <T text={cell.value} />
-              </p>
-            </div>
-          ))}
-        </div>
+          <div
+            className="mx-auto grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-2xl border"
+            style={{ borderColor: GOLD_BORDER_SOFT, background: GOLD_BORDER_SOFT }}
+          >
+            {[
+              { label: labels.roleOffered, value: roleTitle, color: TITLE },
+              { label: labels.preparedFor, value: inviteeName.trim(), color: SCRIPT_GREEN },
+            ].map((cell) => (
+              <div key={cell.label} className="px-3 py-4 sm:px-4 sm:py-5" style={{ background: IVORY }}>
+                <SmallCaps className="text-[0.58rem] sm:text-[0.62rem]">
+                  <T text={cell.label} />
+                </SmallCaps>
+                <p
+                  className={`${theSeasons.className} mt-1.5 text-[0.98rem] tracking-wide [overflow-wrap:anywhere] sm:text-lg`}
+                  style={{ color: cell.color }}
+                >
+                  <T text={cell.value} />
+                </p>
+              </div>
+            ))}
+          </div>
         </Reveal>
       ) : null}
 
@@ -712,6 +737,28 @@ function ProposalLetter({
         </Reveal>
       ) : null}
     </div>
+  )
+}
+
+/** Couple portrait band — inset within the card with ornamental dividers only. */
+function CoupleIllustration({ src }: { src: string }) {
+  return (
+    <Reveal className="mx-auto w-full max-w-2xl">
+      <OrnamentalDivider compact />
+      <div className="relative mx-auto mt-4 sm:mt-5">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt="The couple"
+          width={1536}
+          height={1024}
+          className="block aspect-[3/2] h-auto w-full select-none object-cover object-center"
+        />
+      </div>
+      <div className="mt-4 sm:mt-5">
+        <OrnamentalDivider compact />
+      </div>
+    </Reveal>
   )
 }
 
@@ -734,25 +781,12 @@ function ProposalAsk({
 }) {
   const siteConfig = useSiteConfig()
   const copy = siteConfig.proposal.copy[copyKey]
-  const { labels, coupleImage } = siteConfig.proposal
+  const { labels } = siteConfig.proposal
 
   return (
-    <div className="relative mx-auto mt-9 w-full max-w-lg px-1 sm:mt-11">
-      {coupleImage ? (
-        <Reveal className="relative mx-auto mb-5 w-[7.5rem] sm:mb-7 sm:w-[9.5rem]">
-          <div className="absolute -inset-3 rounded-full opacity-70 blur-xl" style={ambientGlowStyle} aria-hidden />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={coupleImage}
-            alt="The couple"
-            className="relative mx-auto block h-auto w-full select-none"
-            style={{ filter: "drop-shadow(0 14px 28px var(--invite-shadow))" }}
-          />
-        </Reveal>
-      ) : null}
-
+    <div className="relative mx-auto mt-2 w-full max-w-xl sm:mt-3 sm:max-w-2xl">
       <Reveal>
-        <h2 className={`${theSeasons.className} mx-auto max-w-md text-[clamp(1.15rem,5.2vw,1.6rem)] leading-snug tracking-[0.04em]`} style={{ color: INK }}>
+        <h2 className={`${theSeasons.className} mx-auto max-w-md text-[clamp(1.15rem,5.2vw,1.65rem)] leading-snug tracking-[0.04em]`} style={{ color: INK }}>
           <T text={labels.askQuestion} />
           <span className="block pt-1 text-[1.3em] capitalize [overflow-wrap:anywhere]" style={goldGradientText}>
             <T text={`${roleTitle}?`} />
@@ -878,7 +912,7 @@ function ProposalPageInner({ role }: ProposalPageProps) {
   }, [inviteeFromLink])
 
   const siteConfig = useSiteConfig()
-  const { labels } = siteConfig.proposal
+  const { labels, coupleImage } = siteConfig.proposal
   const copyKey = copyKeyFor(role)
   const copy = siteConfig.proposal.copy[copyKey]
   const confirmedDisplayName = (inviteeFromLink || preferredName).trim()
@@ -1039,30 +1073,39 @@ function ProposalPageInner({ role }: ProposalPageProps) {
         <AnimatePresence mode="wait">
           {flowState === "question" && (
             <motion.div key="question" className="relative z-10 w-full" {...cardMotion}>
-              <ProposalCard>
-                <CardHeader />
-                <ProposalLetter
-                  copyKey={copyKey}
-                  inviteeName={inviteeFromLink || preferredName}
-                  roleTitle={role.title}
-                  fill={fill}
-                  bodyClass={bodyClass}
-                />
-                <ProposalAsk
-                  copyKey={copyKey}
-                  roleTitle={role.title}
-                  submitting={submitting}
-                  onYes={() => void handleYesClick()}
-                  onNo={() => goTo("no_clicked")}
-                  fill={fill}
-                  bodyClass={bodyClass}
-                />
-                {errorLine}
-                <Reveal className="mt-9 space-y-4 sm:mt-10">
-                  <OrnamentalDivider compact />
-                  <SignOff line={fill(copy.signOff)} />
-                </Reveal>
-              </ProposalCard>
+              <ProposalCard
+                top={
+                  <>
+                    <CardHeader />
+                    <ProposalLetter
+                      copyKey={copyKey}
+                      inviteeName={inviteeFromLink || preferredName}
+                      roleTitle={role.title}
+                      fill={fill}
+                      bodyClass={bodyClass}
+                    />
+                  </>
+                }
+                band={coupleImage ? <CoupleIllustration src={coupleImage} /> : undefined}
+                bottom={
+                  <>
+                    <ProposalAsk
+                      copyKey={copyKey}
+                      roleTitle={role.title}
+                      submitting={submitting}
+                      onYes={() => void handleYesClick()}
+                      onNo={() => goTo("no_clicked")}
+                      fill={fill}
+                      bodyClass={bodyClass}
+                    />
+                    {errorLine}
+                    <Reveal className="mt-9 space-y-4 sm:mt-10">
+                      <OrnamentalDivider compact />
+                      <SignOff line={fill(copy.signOff)} />
+                    </Reveal>
+                  </>
+                }
+              />
             </motion.div>
           )}
 
